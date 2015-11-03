@@ -21,11 +21,10 @@ top_domains.sort_by { |host, count| count }.reverse.slice(0, 20).each_with_index
   puts "#{i + 1}. #{domains[1]} - #{domains[0]}"
 end
 
-
 # top destinations after serp
 top_search_destinations = Hash.new(0)
 
-db.execute("SELECT p.url, pp.url FROM moz_historyvisits hv INNER JOIN moz_historyvisits phv ON phv.id = hv.from_visit INNER JOIN moz_places p ON p.id = hv.place_id INNER JOIN moz_places pp ON pp.id = phv.place_id WHERE pp.url LIKE '%google.com/url%'") do |row|
+db.execute("SELECT p.url FROM moz_historyvisits hv INNER JOIN moz_historyvisits phv ON phv.id = hv.from_visit INNER JOIN moz_places p ON p.id = hv.place_id INNER JOIN moz_places pp ON pp.id = phv.place_id WHERE pp.url LIKE '%google.com/url%'") do |row|
   top_search_destinations[Addressable::URI.parse(row[0]).host] += 1
 end
 
